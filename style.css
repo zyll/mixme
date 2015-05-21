@@ -1,0 +1,18 @@
+text {
+  font-size: 30px;
+  fill: #ffaf31;
+  stroke: #ffaf31;
+}
+path {
+  stroke: orange;
+  fill: none;
+  stroke-width: 8;
+}
+#markerArrow {
+  fill: orange;
+  stroke: none;
+}
+
+body {
+  background-color: grey;
+}

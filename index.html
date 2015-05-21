@@ -1,0 +1,71 @@
+<html><head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>mixme</title>
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+  <script type="text/javascript" src="./ring-ring.js"></script>
+  <div id="example"></div>
+  <form>
+    <input type="text" name="top"/>
+    <input type="text" name="bottom"/>
+  </form>
+  <script type="text/javascript">
+    var font = {size: 30};
+    var scene = new mixme.Scene({height: 600, width: 600});
+    var ring = new mixme.Ring({x: 250, y: 250, r: 200});
+
+    var r1 = new mixme.Ring({
+      x: ring.x,
+      y: ring.y,
+      r: ring.r + font.size / 2
+    });
+    var arc1 = new mixme.Arc(r1, {θ: -Math.PI}, {θ: 0});
+    var txt1 = new mixme.Text('ooooo.');
+    txt1.follow(arc1);
+    scene.defs(arc1).add(txt1);
+    var arc2 = new mixme.Arc(ring, {θ: Math.PI}, {θ: 0}, true);
+    var txt2 = arc2.text('rolooololo..');
+    scene.add(txt2).defs(arc2);
+
+    var rc = new mixme.Ring({
+      x: ring.x,
+      y: ring.y,
+      r: ring.r + font.size / 4
+    });
+
+    // txt1 arrows
+    mixme.inserted(txt1.el, function() {
+      var pos = txt1.getPosition(font.size);
+      var arc3 = new mixme.Arc(rc, {θ: -Math.PI}, {θ: pos.start.θ}, false);
+      var arc4 = new mixme.Arrow(rc, {θ: pos.end.θ}, {θ: Math.PI / 15}, false);
+      scene.add(arc3).add(arc4);
+      var input = document.querySelector('[name="top"]');
+      input.addEventListener('input', function() {
+        txt1.msg(this.value);
+        var pos = txt1.getPosition(font.size);
+        arc3.set({θ: -Math.PI}, {θ: pos.start.θ}).draw();
+        arc4.set({θ: pos.end.θ}, {θ: Math.PI / 15}).draw();
+      });
+    });
+
+    mixme.inserted(txt2.el, function() {
+      // txt2 arrows
+      var pos = txt2.getPosition(font.size);
+      var arc5 = new mixme.Arc(rc, {θ: -Math.PI}, {θ: pos.start.θ}, true);
+      var arc6 = new mixme.Arrow(rc, {θ: pos.end.θ}, {θ: -Math.PI / 15}, true);
+      scene.add(arc5).add(arc6);
+      var input = document.querySelector('[name="bottom"]');
+      input.addEventListener('input', function() {
+        txt2.msg(this.value);
+        var pos = txt2.getPosition(font.size);
+        arc5.set({θ: -Math.PI}, {θ: pos.start.θ}).draw();
+        arc6.set({θ: pos.end.θ}, {θ: -Math.PI / 15}).draw();
+      });
+
+    });
+
+    document.getElementById('example').appendChild(scene.svg);
+
+  </script>
+</body></html>
